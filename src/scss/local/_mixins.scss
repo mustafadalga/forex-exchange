@@ -1,0 +1,14 @@
+@import "@/scss/variables/_index.scss";
+
+
+@mixin breakpoint($selectedBreakpoint) {
+  @each $breakpoint, $size in $breakpoints {
+
+    @if $selectedBreakpoint == $breakpoint {
+
+      @media screen and (min-width: $size) {
+        @content;
+      }
+    }
+  }
+}
