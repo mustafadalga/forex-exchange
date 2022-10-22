@@ -22,11 +22,13 @@ const props = defineProps({
   <div class="select-group">
     <CustomSelect class="custom-select"
                   :selectedOption="props.fromCurrency"
+                  :clearable="false"
                   @selected="$emit('inputFromCurrency',$event)"
                   :options="props.liveCurrencyList"/>
 
     <CustomSelect class="custom-select"
                   :selectedOption="props.toCurrency"
+                  :clearable="false"
                   @selected="$emit('inputToCurrency',$event)"
                   :options="props.liveCurrencyList"/>
   </div>

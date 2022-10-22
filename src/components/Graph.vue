@@ -193,7 +193,9 @@ function chooseDefaultHistoricalClosePrice () {
           v-bind="props"/>
 
       <div class="graph-status">
-        <LivePrice :price="liveCurrencyPairData"
+        <LivePrice
+            v-if="props.liveCurrencyPairData.bid"
+            :price="props.liveCurrencyPairData"
                    :unit="props.toCurrency"/>
         <HistoricalClosePrice
             v-if="historicalClosePrice.diff"

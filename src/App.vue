@@ -1,13 +1,14 @@
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
 import Header from "@/components/Header.vue";
 import SelectGroup from "@/components/SelectGroup.vue";
-import Graph from "@/components/Graph.vue";
 import Alert from "@/components/Alert.vue";
 import { getPreviousDate, getTodayDate, isWeekend, getFridayDateOfWeekByDate } from "@/helpers";
 import { fetchLiveCurrencyList, fetchLiveCurrencyPair, fetchTimeSeries } from "@/composables";
 import Socket from "@/classes/Socket";
 import { timeTypes } from "@/enums";
+const Graph = defineAsyncComponent(() => import("@/components/Graph.vue"));
+
 
 
 // Variables
@@ -47,7 +48,6 @@ watch([ selectedFromCurrency, selectedToCurrency ], () => {
   removeCurrencyPairData();
 
   if (hasCurrencyPair.value) {
-    socket.subscribeCurrencyPair(currencyPair.value);
     handleLiveCurrencyPair();
     handleTimeSeries();
   }
@@ -67,6 +67,7 @@ async function handleLiveCurrenciesList () {
 }
 
 async function handleLiveCurrencyPair () {
+  socket.subscribeCurrencyPair(currencyPair.value);
   const response = await fetchLiveCurrencyPair(currencyPair.value);
   if (response.status) {
     return liveCurrencyPairData.value = response.data;

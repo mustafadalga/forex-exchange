@@ -15,7 +15,7 @@ const props = defineProps({
 
 <template>
   <div class="live-price">
-    {{ getSymbolFromCurrency(props.unit) }} {{ props.price.bid }}
+    {{ getSymbolFromCurrency(props.unit) }} {{ props.price.bid.toFixed(5) }}
   </div>
 </template>
 

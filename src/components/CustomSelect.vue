@@ -14,9 +14,14 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: "Select Item From List"
+    default: "Type to search..."
   },
+  clearable: {
+    type: Boolean,
+    default: true
+  }
 });
+
 const selectedItem = ref({});
 const watchOptions = {
   immediate: true,
@@ -27,9 +32,11 @@ watch(() => props.selectedOption, (newValue) => selectedItem.value = newValue, w
 <template>
   <v-select :options="props.options"
             class="custom-select"
+            :clearable="clearable"
+            :placeholder="placeholder"
             label="title"
             :modelValue="selectedItem.title"
-            @option:selected="$emit('selected',$event ? $event : {})"/>
+            @update:modelValue="$emit('selected',$event ? $event : {})"/>
 </template>
 
 <style lang="scss" scoped>

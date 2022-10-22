@@ -7,7 +7,7 @@ function getPriceDiff (type, amount, quotes) {
     const startDate = quotes.find(quote => quote.date == startDay);
     const endDate = quotes.find(quote => quote.date == endDay);
 
-    if (startDate) {
+    if (startDate && endDate) {
         return {
             diff: endDate.close - startDate.open,
             rate: getRateOfChange(startDate.open, endDate.close)
@@ -15,8 +15,8 @@ function getPriceDiff (type, amount, quotes) {
     }
 
     return {
-        diff: "No Data",
-        rate: "No Data",
+        diff: "",
+        rate: "",
     }
 }
 

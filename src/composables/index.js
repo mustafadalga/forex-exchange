@@ -24,7 +24,7 @@ async function fetchLiveCurrencyList () {
                     title: responseJson.available_currencies[currency]
                 }
             });
-        }else{
+        } else {
             throw new Error(responseJson.message);
         }
 
@@ -79,8 +79,7 @@ async function fetchTimeSeries (params) {
         if (responseJson.quotes) {
             timeSeries.status = true;
             timeSeries.data = responseJson;
-        }
-        else{
+        } else {
             throw new Error(responseJson.message);
         }
 
