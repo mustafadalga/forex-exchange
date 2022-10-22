@@ -25,11 +25,11 @@ async function fetchLiveCurrencyList () {
                 }
             });
         } else {
-            throw new Error(responseJson.message);
+            throw new Error();
         }
 
     } catch (error) {
-        currencies.errorMessage = error.message;
+        currencies.errorMessage = "An error occurred during loading data.Please try again.";
     }
 
     return currencies;
@@ -52,11 +52,11 @@ async function fetchLiveCurrencyPair (selectedCurrencyPair) {
             currencyPairResponse.status = true;
             currencyPairResponse.data = responseJson.quotes[0]
         } else {
-            throw new Error(responseJson.message);
+            throw new Error();
         }
 
     } catch (error) {
-        currencyPairResponse.errorMessage = error.message;
+        currencyPairResponse.errorMessage = "An error occurred during loading data.Please try again.";
     }
 
     return currencyPairResponse;
@@ -80,11 +80,11 @@ async function fetchTimeSeries (params) {
             timeSeries.status = true;
             timeSeries.data = responseJson;
         } else {
-            throw new Error(responseJson.message);
+            throw new Error();
         }
 
     } catch (error) {
-        timeSeries.errorMessage = error.message;
+        timeSeries.errorMessage = "An error occurred during loading data.Please try again.";
     }
 
     return timeSeries;

@@ -20,7 +20,7 @@ const props = defineProps({
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   color: $white;
   border-radius: 9999px;
   font-size: 13px;
@@ -29,7 +29,7 @@ const props = defineProps({
   }
   @include breakpoint("2xl") {
     font-size: 15px;
-    padding: 10px;
+    padding: 10px 15px;
   }
 }
 
