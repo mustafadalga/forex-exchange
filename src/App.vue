@@ -1,47 +1,197 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { computed, ref, watch } from "vue";
+import Header from "@/components/Header.vue";
+import SelectGroup from "@/components/SelectGroup.vue";
+import Graph from "@/components/Graph.vue";
+import Alert from "@/components/Alert.vue";
+import { getPreviousDate, getTodayDate, isWeekend, getFridayDateOfWeekByDate } from "@/helpers";
+import { fetchLiveCurrencyList, fetchLiveCurrencyPair, fetchTimeSeries } from "@/composables";
+import Socket from "@/classes/Socket";
+import { timeTypes } from "@/enums";
+
+
+// Variables
+const socket = new Socket();
+const selectedFromCurrency = ref({});
+const selectedToCurrency = ref({});
+const liveCurrencyList = ref([]);
+const timeSeriesRawData = ref({});
+const initialCurrencyPair = {
+  fromCurrency: "USD",
+  toCurrency: "TRY"
+}
+const liveCurrencyPairData = ref({
+  pair: null,
+  bid: null,
+  ask: null,
+  mid: null,
+  date: null
+});
+
+
+// Computed Variables
+const hasCurrencyPair = computed(() => selectedFromCurrency.value.id && selectedToCurrency.value.id ? true : false);
+const currencyPair = computed(() => `${selectedFromCurrency.value.id}${selectedToCurrency.value.id}`);
+const alerts = ref([]);
+const hasAlert = computed(() => alerts.value.length ? true : false);
+
+
+handleLiveCurrenciesList();
+socket.connect();
+socket.handleLiveCurrencyPair(currencyPair, liveCurrencyPairData);
+
+
+// Watch currency pair
+watch([ selectedFromCurrency, selectedToCurrency ], () => {
+  removeAlerts();
+  removeCurrencyPairData();
+
+  if (hasCurrencyPair.value) {
+    socket.subscribeCurrencyPair(currencyPair.value);
+    handleLiveCurrencyPair();
+    handleTimeSeries();
+  }
+});
+
+async function handleLiveCurrenciesList () {
+  const response = await fetchLiveCurrencyList();
+  if (response.status) {
+    liveCurrencyList.value = response.data
+    return handleInitialCurrencyPair();
+  }
+
+  alerts.value.push({
+    type: "danger",
+    message: response.errorMessage
+  })
+}
+
+async function handleLiveCurrencyPair () {
+  const response = await fetchLiveCurrencyPair(currencyPair.value);
+  if (response.status) {
+    return liveCurrencyPairData.value = response.data;
+  }
+
+  alerts.value.push({
+    type: "danger",
+    message: response.errorMessage
+  })
+}
+
+async function handleTimeSeries () {
+  const startDate = getPreviousDate(timeTypes.year);
+  const endDate = isWeekend() ? getFridayDateOfWeekByDate(new Date()) : getTodayDate();
+
+
+  const response = await fetchTimeSeries({
+    currency: currencyPair.value,
+    start_date: startDate,
+    end_date: endDate
+  });
+
+
+  if (response.status) {
+    return (timeSeriesRawData.value = response.data);
+  }
+
+  removeTimeSeriesRawData();
+  alerts.value.push({
+    type: "danger",
+    message: response.errorMessage
+  })
+}
+
+function handleInitialCurrencyPair () {
+  const pairCurrenciesIDs = [ initialCurrencyPair.fromCurrency, initialCurrencyPair.toCurrency ];
+  const hasInitialCurrencyPair = pairCurrenciesIDs.every(currencyID => liveCurrencyList.value.some(liveCurrency => liveCurrency.id == currencyID));
+
+  if (hasInitialCurrencyPair) {
+    const fromCurrency = liveCurrencyList.value.find(liveCurrency => liveCurrency.id == initialCurrencyPair.fromCurrency)
+    const toCurrency = liveCurrencyList.value.find(liveCurrency => liveCurrency.id == initialCurrencyPair.toCurrency)
+    selectedFromCurrency.value = fromCurrency;
+    selectedToCurrency.value = toCurrency;
+  }
+}
+
+function removeAlerts () {
+  alerts.value = [];
+}
+
+function removeCurrencyPairData () {
+  liveCurrencyPairData.value = {
+    pair: null,
+    bid: null,
+    ask: null,
+    mid: null,
+    date: null
+  }
+  removeTimeSeriesRawData();
+}
+
+function removeTimeSeriesRawData () {
+  timeSeriesRawData.value = {};
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <main class="main">
+    <Header/>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+    <section class="section">
+      <SelectGroup :liveCurrencyList="liveCurrencyList"
+                   :fromCurrency="selectedFromCurrency"
+                   :toCurrency="selectedToCurrency"
+                   @inputFromCurrency="selectedFromCurrency=$event"
+                   @inputToCurrency="selectedToCurrency=$event"/>
+      <Graph
+          v-if="hasCurrencyPair"
+          :liveCurrencyPairData="liveCurrencyPairData"
+          :timeSeriesRawData="timeSeriesRawData"
+          :fromCurrency="selectedFromCurrency.id"
+          :toCurrency="selectedToCurrency.id"/>
+    </section>
 
-  <main>
-    <TheWelcome />
+
   </main>
+  <div class="alerts" v-if="hasAlert">
+    <Alert v-for="alert in alerts"
+           :alert="alert"
+           :key="alert.message"/>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<style lang="scss">
+@import "@/scss/_main.scss";
+</style>
+<style lang="scss" scoped>
+@import "@/scss/local/_mixins.scss";
+
+.section {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 50px;
+  @include breakpoint("md") {
+    min-height: 500px;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+.alerts {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  display: grid;
+  gap: 15px;
+  padding: 20px;
+  z-index: 99999;
+  @include breakpoint("md") {
+    max-width: 500px;
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+  @include breakpoint("2xl") {
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 </style>

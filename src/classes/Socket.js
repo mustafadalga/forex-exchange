@@ -13,7 +13,7 @@ class Socket {
         });
     }
 
-    emitCurrencyPair (currencyPair) {
+    subscribeCurrencyPair (currencyPair) {
         this.socket.emit("symbolSub", { symbol: currencyPair });
     }
 
