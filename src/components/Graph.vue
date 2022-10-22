@@ -167,6 +167,7 @@ function createChart () {
 function updateChart () {
   chart.value.update({
     series: [ {
+      name: `${props.fromCurrency}${props.toCurrency} Price`,
       type: 'candlestick',
       data: graphData.value,
     } ],

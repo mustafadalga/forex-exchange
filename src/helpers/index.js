@@ -25,8 +25,8 @@ function getRateOfChange (open, close) {
     return (close - open) / open * 100
 }
 
-function getPreviousDate (type, amount = 1) {
-    return moment(moment.now()).subtract(amount, type).format("YYYY-MM-DD")
+function getPreviousDate (type, amount = 1, date = moment.now()) {
+    return moment(date).subtract(amount, type).format("YYYY-MM-DD")
 }
 
 function getTodayDate () {

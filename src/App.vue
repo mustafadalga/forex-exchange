@@ -80,9 +80,14 @@ async function handleLiveCurrencyPair () {
 }
 
 async function handleTimeSeries () {
-  const startDate = getPreviousDate(timeTypes.year);
+  let startDate;
   const endDate = isWeekend() ? getFridayDateOfWeekByDate(new Date()) : getTodayDate();
 
+  if (isWeekend()) {
+    startDate = getPreviousDate(timeTypes.year, 1, new Date(getFridayDateOfWeekByDate()));
+  } else {
+    startDate = getPreviousDate(timeTypes.year);
+  }
 
   const response = await fetchTimeSeries({
     currency: currencyPair.value,
