@@ -18,8 +18,8 @@ const selectedToCurrency = ref({});
 const liveCurrencyList = ref([]);
 const timeSeriesRawData = ref({});
 const initialCurrencyPair = {
-  fromCurrency: "USD",
-  toCurrency: "TRY"
+  fromCurrency: "EUR",
+  toCurrency: "USD"
 }
 const liveCurrencyPairData = ref({
   pair: null,

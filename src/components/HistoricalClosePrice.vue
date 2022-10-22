@@ -8,37 +8,44 @@ const props = defineProps({
   }
 })
 
-const arrowClass = computed(() => props.historicalClosePrice.diff > 0 ? "arrow-up" : "arrow-down");
+const textColorClass = computed(() => props.historicalClosePrice.diff > 0 ? "text-success" : "text-danger");
 const arrowSymbol = computed(() => props.historicalClosePrice.diff > 0 ? "&#8593" : "&#8595");
 </script>
 
 <template>
   <div class="close-price">
-    <div :class="['arrow',arrowClass]" v-html="arrowSymbol"></div>
-    <div class="diff">
+    <div :class="['arrow',textColorClass]" v-html="arrowSymbol"></div>
+    <div :class="textColorClass">
       {{ props.historicalClosePrice.diff.toFixed(6) }}
     </div>
-    <div class="rate">
+    <div :class="textColorClass">
       ({{ props.historicalClosePrice.rate.toFixed(6) }} %)
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-@import "@/scss/variables/_index.scss";
+@import "@/scss/local/_index.scss";
 
 .close-price {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-size: 15px;
+  @include breakpoint("xl") {
+    font-size: 18px;
+  }
+  @include breakpoint("2xl") {
+    font-size: 20px;
+  }
 }
 
-.arrow {
-  &-up {
+.text {
+  &-success {
     color: $success;
   }
 
-  &-down {
+  &-danger {
     color: $danger;
   }
 }
