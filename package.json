@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "currency-flags": "^3.4.0",
+    "currency-symbol-map": "^5.1.0",
+    "highcharts": "^10.2.1",
+    "moment": "^2.29.4",
     "socket.io-client": "^2.0.0",
     "vue": "^3.2.38",
     "vue-select": "^4.0.0-beta.5"
