@@ -2,7 +2,7 @@
 import CustomSelect from "@/components/CustomSelect.vue";
 
 const props = defineProps({
-  liveCurrenciesList: {
+  liveCurrencyList: {
     type: Array,
     required: true
   },
@@ -22,13 +22,13 @@ const props = defineProps({
   <div class="select-group">
     <CustomSelect class="custom-select"
                   :selectedOption="props.fromCurrency"
-                  @input="$emit('inputFromCurrency',$event)"
-                  :options="props.liveCurrenciesList"/>
+                  @selected="$emit('inputFromCurrency',$event)"
+                  :options="props.liveCurrencyList"/>
 
     <CustomSelect class="custom-select"
                   :selectedOption="props.toCurrency"
-                  @input="$emit('inputToCurrency',$event)"
-                  :options="props.liveCurrenciesList"/>
+                  @selected="$emit('inputToCurrency',$event)"
+                  :options="props.liveCurrencyList"/>
   </div>
 </template>
 
@@ -46,8 +46,8 @@ const props = defineProps({
 }
 
 .custom-select {
-  @include breakpoint("lg") {
-    max-width: 300px;
+  @include breakpoint("md") {
+    max-width: 400px;
   }
 }
 </style>

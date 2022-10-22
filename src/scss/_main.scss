@@ -1,12 +1,13 @@
 @import 'variables';
 @import 'local';
 
-*, *:before, *:after {
-  box-sizing: border-box;
+body{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  height: 100%;
+  width: 100%;
 }
 
 #app {
-  width: 100%;
   max-width: $br_2xl;
   margin-left: auto;
   margin-right: auto;
@@ -18,6 +19,8 @@
   width: 100%;
   padding: 20px;
   gap: 20px;
+
+
   @include breakpoint("md") {
     padding-top: 25px;
     padding-bottom: 25px;
@@ -27,19 +30,8 @@
     padding-top: 30px;
     padding-bottom: 30px;
   }
-}
-
-.section {
-  margin-top: 50px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  @include breakpoint("lg") {
-    margin-top: 60px;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-  }
-  @include breakpoint("lg") {
-    margin-top: 80px;
+  @include breakpoint("2xl"){
+    padding-left: 0;
+    padding-right: 0;
   }
 }

@@ -16,10 +16,7 @@
   &__title {
     font-weight: bold;
     color: black;
-    font-size: 18px;
-    @include breakpoint("md") {
-      font-size: 20px;
-    }
+    font-size: 20px;
     @include breakpoint("lg") {
       font-size: 28px;
     }
@@ -34,10 +31,7 @@
   &__description {
     color: rgb(75 85 99);
     font-weight: bold;
-    font-size: 13px;
-    @include breakpoint("md") {
-      font-size: 15px;
-    }
+    font-size: 15px;
     @include breakpoint("xl") {
       font-size: 18px;
     }

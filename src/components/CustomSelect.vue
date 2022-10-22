@@ -26,13 +26,26 @@ watch(() => props.selectedOption, (newValue) => selectedItem.value = newValue, w
 </script>
 <template>
   <v-select :options="props.options"
+            class="custom-select"
             label="title"
-            :modelValue="selectedItem.id"
-            @update:modelValue="$emit('input',$event ? $event : {})"/>
+            :modelValue="selectedItem.title"
+            @option:selected="$emit('selected',$event ? $event : {})"/>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/scss/local/_index.scss";
+
 :deep(.vs__dropdown-toggle) {
   padding: 8px;
+}
+
+.custom-select :deep(*) {
+  font-size: 12px;
+  @include breakpoint("md") {
+    font-size: 15px;
+  }
+  @include breakpoint("2xl") {
+    font-size: 16px;
+  }
 }
 </style>
