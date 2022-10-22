@@ -1,35 +1,50 @@
-# medirect-interview
+# Medirect - Forex Exchange
 
-This template should help get you started developing with Vue 3 in Vite.
+<h6 align="center">
+  <img alt="Forex Exchange" src="https://user-images.githubusercontent.com/25087769/197361601-75cb972b-eaac-444d-adb0-876687cc75af.png"/>
+  <br>
+  <br>
+  <br>
+  <br>
 
-## Recommended IDE Setup
+  <p align="center">
+  <a href="#demo">Demo</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#used-technologies">Used Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#project-setup">Project Setup</a>&nbsp;&nbsp;&nbsp;
+  </p>
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+</h6>
 
-## Customize configuration
+## Demo
+* [Project](https://medirect-forex-exchange.netlify.app/)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Used Technologies
+* Vue.js 3
+* SCSS / CSS 3
+* Vite.js
+* Socket.io
+* 3rd party libraries
+  * Highchart
+  * vue-select
+  * moment.js
+  * highcharts
+  * currency-symbol-map
+  * currency-flags
 
 ## Project Setup
 
-```sh
-npm install
+* The following variables should be defined in an .env file.
+
+**Environment Variables(.env)**
+
+* VITE_STREAMING_API_URL
+* VITE_REST_API_URL
+* VITE_STREAMING_API_KEY
+* VITE_REST_API_KEY
+
+### Project Setup and Runs
+
 ```
-
-### Compile and Hot-Reload for Development
-
-```sh
+npm install 
 npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
