@@ -1,11 +1,12 @@
 @import 'variables';
 @import 'local';
 
-body{
+body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   height: 100%;
   width: 100%;
   background-color: $white;
+  color: $black;
 }
 
 #app {
@@ -30,7 +31,7 @@ body{
     padding-top: 30px;
     padding-bottom: 30px;
   }
-  @include breakpoint("2xl"){
+  @include breakpoint("2xl") {
     padding-left: 0;
     padding-right: 0;
   }
