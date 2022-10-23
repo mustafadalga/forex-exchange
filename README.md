@@ -1,4 +1,6 @@
-# Medirect - Forex Exchange
+# Forex Exchange
+
+**The project uses https://tradermade.com/ data.**
 
 <h6 align="center">
   <img alt="Forex Exchange" src="https://user-images.githubusercontent.com/25087769/197361601-75cb972b-eaac-444d-adb0-876687cc75af.png"/>
@@ -16,7 +18,7 @@
 </h6>
 
 ## Demo
-* [Project](https://medirect-forex-exchange.netlify.app/)
+* [Project](https://forex-exchange-v1.netlify.app/)
 
 ## Used Technologies
 * Vue.js 3
@@ -37,8 +39,8 @@
 
 **Environment Variables(.env)**
 
-* VITE_STREAMING_API_URL
-* VITE_REST_API_URL
+* [VITE_STREAMING_API_URL](https://tradermade.com/docs/streaming-data-api)
+* [VITE_REST_API_URL](https://tradermade.com/docs/restful-api)
 * VITE_STREAMING_API_KEY
 * VITE_REST_API_KEY
 
