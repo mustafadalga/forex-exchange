@@ -1,8 +1,22 @@
 import moment from "moment";
+import { timeTypes } from "@/enums";
+
 
 function getPriceDiff (type, amount, quotes) {
-    const ago = new Date(getPreviousDate(type, amount));
-    const startDay = isWeekend(ago) ? getFridayDateOfWeekByDate(ago) : getPreviousDate(type, amount);
+    const previousDate = getPreviousDate(type, amount);
+    let startDay;
+
+    // time-series limit is 1 year.
+    if (type == timeTypes.year && isWeekend(new Date(previousDate))) {
+        startDay = getNextMonday(new Date(previousDate));
+    } else {
+        if (isWeekend(new Date(previousDate))) {
+            startDay = getFridayDateOfWeekByDate(new Date(previousDate))
+        } else {
+            startDay = previousDate
+        }
+    }
+
     const endDay = isWeekend() ? getFridayDateOfWeekByDate() : getTodayDate();
     const startDate = quotes.find(quote => quote.date == startDay);
     const endDate = quotes.find(quote => quote.date == endDay);
@@ -57,6 +71,18 @@ function getFridayDateOfWeekByDate (date = new Date()) {
 
     return moment(fridayDate).format("YYYY-MM-DD");
 }
+
+// Reference: https://bobbyhadz.com/blog/javascript-get-date-of-next-monday#:~:text=The%20method%20takes%20an%20integer,%2C%20Tuesday%20is%202%2C%20etc.
+function getNextMonday (date = new Date()) {
+    const newDate = new Date(date.getTime());
+    const dayOfMonth = newDate.getDate();
+    const dayOfWeek = newDate.getDay();
+    const numberOfDaysToAdd = dayOfMonth + ((7 - dayOfWeek + 1) % 7 || 7);
+    const nextMonday = new Date(newDate.setDate(numberOfDaysToAdd));
+
+    return moment(nextMonday).format("YYYY-MM-DD");
+}
+
 
 export {
     getPriceDiff,
