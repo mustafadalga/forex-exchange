@@ -8,6 +8,8 @@ const props = defineProps({
   }
 })
 
+const diff = computed(() => props.historicalClosePrice.diff.toFixed(6));
+const rate = computed(() => `${props.historicalClosePrice.rate.toFixed(6)}%`);
 const textColorClass = computed(() => props.historicalClosePrice.diff > 0 ? "text-success" : "text-danger");
 const arrowSymbol = computed(() => props.historicalClosePrice.diff > 0 ? "&#8593" : "&#8595");
 </script>
@@ -16,10 +18,10 @@ const arrowSymbol = computed(() => props.historicalClosePrice.diff > 0 ? "&#8593
   <div class="close-price">
     <div :class="['arrow',textColorClass]" v-html="arrowSymbol"></div>
     <div :class="textColorClass">
-      {{ props.historicalClosePrice.diff.toFixed(6) }}
+      {{ diff }}
     </div>
     <div :class="textColorClass">
-      ({{ props.historicalClosePrice.rate.toFixed(6) }} %)
+      ({{ rate }})
     </div>
   </div>
 </template>

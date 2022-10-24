@@ -7,14 +7,14 @@ import { getPreviousDate, getTodayDate, isWeekend, getFridayDateOfWeekByDate } f
 import { fetchLiveCurrencyList, fetchLiveCurrencyPair, fetchTimeSeries } from "@/composables";
 import Socket from "@/classes/Socket";
 import { timeTypes } from "@/enums";
-const Graph = defineAsyncComponent(() => import("@/components/Graph.vue"));
 
+const Graph = defineAsyncComponent(() => import("@/components/Graph.vue"));
 
 
 // Variables
 const socket = new Socket();
-const selectedFromCurrency = ref({});
-const selectedToCurrency = ref({});
+let selectedFromCurrency = ref({});
+let selectedToCurrency = ref({});
 const liveCurrencyList = ref([]);
 const timeSeriesRawData = ref({});
 const initialCurrencyPair = {

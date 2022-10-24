@@ -28,11 +28,10 @@ const props = defineProps({
   }
 });
 const chart = ref(null);
-const defaultSelectedHistoricalRangeIndex = 2;
+const selectedHistoricalRangeIndex = ref(2);
 const watchOptions = {
   deep: true,
 }
-
 
 // Computed
 const quotes = computed(() => props.timeSeriesRawData.quotes ? props.timeSeriesRawData.quotes : []);
@@ -55,20 +54,17 @@ const graphData = computed(() => {
   })
 });
 
-
 watch(graphData, () => {
   removeHistoricalClosePrice();
+  chooseInitialHistoricalClose();
 
-  if (hasQuotes.value) {
-    chooseDefaultHistoricalClosePrice();
-    chart.value ? updateChart() : createChart()
-  }
+  chart.value ? updateChart() : createChart();
 
 }, watchOptions);
 
 
 function createChart () {
-  chart.value = Highcharts.stockChart('chart', {
+  chart.value = new Highcharts.stockChart('chart', {
     yAxis: [ {
       labels: {
         align: 'center',
@@ -96,7 +92,6 @@ function createChart () {
     } ],
     navigator: {
       enabled: false
-
     },
     scrollbar: {
       enabled: false
@@ -159,12 +154,13 @@ function createChart () {
           }
         }
       } ],
-      selected: defaultSelectedHistoricalRangeIndex
+      selected: selectedHistoricalRangeIndex.value
     }
   });
 }
 
 function updateChart () {
+  chart.value.rangeSelector.clickButton(selectedHistoricalRangeIndex.value, true);
   chart.value.update({
     series: [ {
       name: `${props.fromCurrency}${props.toCurrency} Price`,
@@ -181,7 +177,7 @@ function removeHistoricalClosePrice () {
   }
 }
 
-function chooseDefaultHistoricalClosePrice () {
+function chooseInitialHistoricalClose () {
   historicalClosePrice.value = getPriceDiff(timeTypes.month, 1, quotes.value);
 }
 </script>
@@ -197,7 +193,7 @@ function chooseDefaultHistoricalClosePrice () {
         <LivePrice
             v-if="props.liveCurrencyPairData.bid"
             :price="props.liveCurrencyPairData"
-                   :unit="props.toCurrency"/>
+            :unit="props.toCurrency"/>
         <HistoricalClosePrice
             v-if="historicalClosePrice.diff"
             :historicalClosePrice="historicalClosePrice"/>

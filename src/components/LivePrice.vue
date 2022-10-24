@@ -1,6 +1,6 @@
 <script setup>
 import getSymbolFromCurrency from 'currency-symbol-map'
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 const props = defineProps({
   unit: {
@@ -14,10 +14,12 @@ const props = defineProps({
 });
 
 const showAnimation = ref(false);
+const unit = computed(() => getSymbolFromCurrency(props.unit));
+const price = computed(() => Number(props.price.bid).toFixed(5));
 let timeoutID;
 
 
-watch(() => props.price, () => handleChangesAnimation());
+watch(() => props.price.bid, () => handleChangesAnimation());
 
 
 async function handleChangesAnimation () {
@@ -34,7 +36,7 @@ async function handleChangesAnimation () {
 <template>
   <div class="live-price">
     <span :class="showAnimation ? 'animation-fluctuation':''">
-      {{ getSymbolFromCurrency(props.unit) }} {{ props.price.bid.toFixed(5) }}
+      {{ unit }} {{ price }}
     </span>
   </div>
 </template>
