@@ -12,6 +12,7 @@
   <p align="center">
   <a href="#demo">Demo</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#used-technologies">Used Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#notes">Notes</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#project-setup">Project Setup</a>&nbsp;&nbsp;&nbsp;
   </p>
 
@@ -32,6 +33,12 @@
   * highcharts
   * currency-symbol-map
   * currency-flags
+
+## Notes
+* Since the stock market is closed on the weekend, I am showing the data for Friday of that week.
+* I show the previous day's data when the stock market is closed on weekdays. (market_open_status rest api)
+* Timeseries rest API returns server error for pairs (SAR / USD) and (SAR / XPD). As a result, the graph cannot be rendered.
+* There is a maximum of 1 year of graphic data.
 
 ## Project Setup
 
