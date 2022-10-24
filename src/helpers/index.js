@@ -2,9 +2,10 @@ import moment from "moment";
 import { timeTypes } from "@/enums";
 
 
-function getPriceDiff (type, amount, quotes) {
+function getPriceDiff (type, amount, timeSeries, nextClose) {
     const previousDate = getPreviousDate(type, amount);
     let startDay;
+    let endDay;
 
     // time-series limit is 1 year.
     if (type == timeTypes.year && isWeekend(new Date(previousDate))) {
@@ -17,9 +18,15 @@ function getPriceDiff (type, amount, quotes) {
         }
     }
 
-    const endDay = isWeekend() ? getFridayDateOfWeekByDate() : getTodayDate();
-    const startDate = quotes.find(quote => quote.date == startDay);
-    const endDate = quotes.find(quote => quote.date == endDay);
+    if (isWeekend()) {
+        endDay = getFridayDateOfWeekByDate();
+    } else {
+        endDay = isAfter(nextClose) ? getPreviousDate(timeTypes.day, 1) : getTodayDate();
+    }
+
+    const startDate = timeSeries.find(quote => quote.date == startDay);
+    const endDate = timeSeries.find(quote => quote.date == endDay);
+
 
     if (startDate && endDate) {
         return {
@@ -55,6 +62,9 @@ function isWeekend (date = new Date()) {
     return date.getDay() === 6 || date.getDay() === 0;
 }
 
+function isAfter (closingDate) {
+    return moment(new Date()).isAfter(closingDate)
+}
 
 function getFridayDateOfWeekByDate (date = new Date()) {
     const fridayDate = date;
@@ -91,5 +101,6 @@ export {
     getTimestampByDate,
     getTodayDate,
     getFridayDateOfWeekByDate,
-    isWeekend
+    isWeekend,
+    isAfter
 }

@@ -25,6 +25,10 @@ const props = defineProps({
   toCurrency: {
     type: String,
     required: true
+  },
+  marketOpenStatus: {
+    type: Object,
+    required: true
   }
 });
 const chart = ref(null);
@@ -105,7 +109,7 @@ function createChart () {
         text: '1d',
         events: {
           click: function () {
-            historicalClosePrice.value = getPriceDiff(timeTypes.day, 1, quotes.value);
+            historicalClosePrice.value = getPriceDiff(timeTypes.day, 1, quotes.value, props.marketOpenStatus.nextClose);
           }
         }
       }, {
@@ -114,7 +118,7 @@ function createChart () {
         text: '1w',
         events: {
           click: function () {
-            historicalClosePrice.value = getPriceDiff(timeTypes.week, 1, quotes.value);
+            historicalClosePrice.value = getPriceDiff(timeTypes.week, 1, quotes.value, props.marketOpenStatus.nextClose);
           }
         }
       }, {
@@ -123,7 +127,7 @@ function createChart () {
         text: '1m',
         events: {
           click: function () {
-            historicalClosePrice.value = getPriceDiff(timeTypes.month, 1, quotes.value);
+            historicalClosePrice.value = getPriceDiff(timeTypes.month, 1, quotes.value, props.marketOpenStatus.nextClose);
           }
         }
       }, {
@@ -132,7 +136,7 @@ function createChart () {
         text: '3m',
         events: {
           click: function () {
-            historicalClosePrice.value = getPriceDiff(timeTypes.month, 3, quotes.value)
+            historicalClosePrice.value = getPriceDiff(timeTypes.month, 3, quotes.value, props.marketOpenStatus.nextClose);
           }
         }
       }, {
@@ -141,7 +145,7 @@ function createChart () {
         text: '6m',
         events: {
           click: function () {
-            historicalClosePrice.value = getPriceDiff(timeTypes.month, 6, quotes.value);
+            historicalClosePrice.value = getPriceDiff(timeTypes.month, 6, quotes.value, props.marketOpenStatus.nextClose);
           }
         }
       }, {
@@ -150,7 +154,7 @@ function createChart () {
         text: "1y",
         events: {
           click: function () {
-            historicalClosePrice.value = getPriceDiff(timeTypes.year, 1, quotes.value);
+            historicalClosePrice.value = getPriceDiff(timeTypes.year, 1, quotes.value, props.marketOpenStatus.nextClose);
           }
         }
       } ],
@@ -178,7 +182,7 @@ function removeHistoricalClosePrice () {
 }
 
 function chooseInitialHistoricalClose () {
-  historicalClosePrice.value = getPriceDiff(timeTypes.month, 1, quotes.value);
+  historicalClosePrice.value = getPriceDiff(timeTypes.month, 1, quotes.value, props.marketOpenStatus.nextClose);
 }
 </script>
 

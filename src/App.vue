@@ -3,8 +3,8 @@ import { computed, defineAsyncComponent, ref, watch } from "vue";
 import Header from "@/components/Header.vue";
 import SelectGroup from "@/components/SelectGroup.vue";
 import Alert from "@/components/Alert.vue";
-import { getPreviousDate, getTodayDate, isWeekend, getFridayDateOfWeekByDate } from "@/helpers";
-import { fetchLiveCurrencyList, fetchLiveCurrencyPair, fetchTimeSeries } from "@/composables";
+import { getPreviousDate, getTodayDate, isWeekend, getFridayDateOfWeekByDate, isAfter } from "@/helpers";
+import { fetchLiveCurrencyList, fetchLiveCurrencyPair, fetchTimeSeries, fetchMarketOpenStatus } from "@/composables";
 import Socket from "@/classes/Socket";
 import { timeTypes } from "@/enums";
 
@@ -28,6 +28,7 @@ const liveCurrencyPairData = ref({
   mid: null,
   date: null
 });
+const marketOpenStatus = ref({});
 
 
 // Computed Variables
@@ -35,7 +36,6 @@ const hasCurrencyPair = computed(() => selectedFromCurrency.value.id && selected
 const currencyPair = computed(() => `${selectedFromCurrency.value.id}${selectedToCurrency.value.id}`);
 const alerts = ref([]);
 const hasAlert = computed(() => alerts.value.length ? true : false);
-
 
 handleLiveCurrenciesList();
 socket.connect();
@@ -53,6 +53,7 @@ watch([ selectedFromCurrency, selectedToCurrency ], () => {
   }
 });
 
+
 async function handleLiveCurrenciesList () {
   const response = await fetchLiveCurrencyList();
   if (response.status) {
@@ -65,6 +66,7 @@ async function handleLiveCurrenciesList () {
     message: response.errorMessage
   })
 }
+
 
 async function handleLiveCurrencyPair () {
   socket.subscribeCurrencyPair(currencyPair.value);
@@ -81,12 +83,26 @@ async function handleLiveCurrencyPair () {
 
 async function handleTimeSeries () {
   let startDate;
-  const endDate = isWeekend() ? getFridayDateOfWeekByDate(new Date()) : getTodayDate();
+  let endDate;
+
+  if (!marketOpenStatus.value.nextClose) {
+    await handleMarketOpenStatus();
+  }
 
   if (isWeekend()) {
-    startDate = getPreviousDate(timeTypes.year, 1, new Date(getFridayDateOfWeekByDate()));
+    startDate = getPreviousDate(timeTypes.year, 1);
+    endDate = getFridayDateOfWeekByDate();
+
   } else {
-    startDate = getPreviousDate(timeTypes.year);
+
+    if (isAfter(marketOpenStatus.value.nextClose)) {
+      const yesterday = getPreviousDate(timeTypes.day, 1);
+      startDate = getPreviousDate(timeTypes.year, 1, new Date(yesterday));
+      endDate = getPreviousDate(timeTypes.day, 1);
+    } else {
+      startDate = getPreviousDate(timeTypes.year, 1);
+      endDate = getTodayDate();
+    }
   }
 
   const response = await fetchTimeSeries({
@@ -101,6 +117,24 @@ async function handleTimeSeries () {
   }
 
   removeTimeSeriesRawData();
+  alerts.value.push({
+    type: "danger",
+    message: response.errorMessage
+  })
+}
+
+async function handleMarketOpenStatus () {
+  const response = await fetchMarketOpenStatus();
+
+  if (response.status) {
+    (marketOpenStatus.value = {
+      nextClose: response.data.next_close,
+      status: Boolean(response.data.status)
+    })
+
+    return;
+  }
+
   alerts.value.push({
     type: "danger",
     message: response.errorMessage
@@ -153,6 +187,7 @@ function removeTimeSeriesRawData () {
           v-if="hasCurrencyPair"
           :liveCurrencyPairData="liveCurrencyPairData"
           :timeSeriesRawData="timeSeriesRawData"
+          :marketOpenStatus="marketOpenStatus"
           :fromCurrency="selectedFromCurrency.id"
           :toCurrency="selectedToCurrency.id"/>
     </section>
