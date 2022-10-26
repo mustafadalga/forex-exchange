@@ -32,8 +32,8 @@ watch(() => props.selectedOption, (newValue) => selectedItem.value = newValue, w
 <template>
   <v-select :options="props.options"
             class="custom-select"
-            :clearable="clearable"
-            :placeholder="placeholder"
+            :clearable="props.clearable"
+            :placeholder="props.placeholder"
             label="title"
             :modelValue="selectedItem.title"
             @update:modelValue="$emit('selected',$event ? $event : {})"/>
