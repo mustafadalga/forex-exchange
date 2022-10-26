@@ -36,6 +36,7 @@
 
 ## Notes
 * Since the stock market is closed on the weekend, I am showing the data for Friday of that week.
+* If the day a year ago was the weekend, I am showing the graph data of the Monday of the next week of that day.
 * I show the previous day's data when the stock market is closed on weekdays. (market_open_status rest api)
 * Timeseries rest API returns server error for pairs (SAR / USD) and (SAR / XPD). As a result, the graph cannot be rendered.
 * There is a maximum of 1 year of graphic data.
